@@ -1,0 +1,6 @@
+Milestones:
+	1. Define a JSON spec for color coded lyrics
+	2. Python script that read a ccl URL, and outputs ccl-JSON of that song
+	3. Node app that takes ccl-JSON + pictures of the members, and generates the CCL images of that song
+	4. Node app that takes ccl-JSON + pictures of the members + timing data, and generates an mp4 video with the correct timings
+	5. Node app that takes all the above + the song itself, and makes a video with the full output

@@ -4,6 +4,7 @@
   "private": true,
   "main": "public/main.js",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -21,9 +22,9 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -45,6 +46,8 @@
     ]
   },
   "devDependencies": {
+    "@rescripts/cli": "^0.0.15",
+    "@rescripts/rescript-env": "^0.0.12",
     "concurrently": "^4.1.0",
     "wait-on": "^3.2.0"
   }

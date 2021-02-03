@@ -1,8 +1,52 @@
 const { app, BrowserWindow } = require('electron')
+const ipcMain = require('electron').ipcMain
+const path = require('path');
+const mediaPath = __dirname;
+
+
+// hopefully for sending messages to the renderer process about how the saving is going
+let win;
+
+// for actually saving the videos
+const videoshow = require('videoshow');
+videoshow.ffmpeg = require('fluent-ffmpeg');
+// videoshow.ffmpeg.setFfmpegPath('/usr/snap/ffmpeg')
+// videoshow.ffmpeg.setFfprobePath("/snap/bin/ffmpeg.ffprobe")
+
+const saveVideo = (images, audioFile, videoOptions, outputName) => {
+  const resolvedImgPaths = images.map(val=>path.join(mediaPath, val))
+  console.log("using song", path.join(mediaPath, audioFile));
+  videoshow(resolvedImgPaths, videoOptions)
+    .audio(path.join(mediaPath, audioFile))
+    .save(path.join(mediaPath, "..", outputName))
+    .on('start', function (command) {
+      console.log('ffmpeg process started:', command)
+      // setSaveMessage("Saving...")
+    })
+    .on('error', function (err, stdout, stderr) {
+      console.error('Error:', err)
+      console.error('ffmpeg stderr:', stderr)
+      win.webContents.send('video-save-progress', stderr)
+    })
+    .on('end', function (output) {
+      console.error('Video created in:', output)
+      // setSaveMessage(`Video created at ${output}`)
+      win.webContents.send('video-save-progress', `Video created at ${output}`)
+    })
+}
+
+// really basic IPC method to see if IPC works
+ipcMain.on('save-video', (event, arg) => {
+  console.log(arg); // prints "hana, dul, set..."
+  saveVideo(arg.images, arg.songFileName, arg.videoOptions, arg.outputName);
+  event.reply('video-save-progress', 'Saving video...')
+})
+
+
 
 function createWindow () {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {

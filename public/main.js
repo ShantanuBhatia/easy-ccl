@@ -1,5 +1,7 @@
-const { app, BrowserWindow } = require('electron')
-const ipcMain = require('electron').ipcMain
+const { app, BrowserWindow } = require('electron');
+const { getSongMetadata } = require("./utils/cclscrape");
+
+const ipcMain = require('electron').ipcMain;
 const path = require('path');
 const mediaPath = __dirname;
 
@@ -42,6 +44,10 @@ ipcMain.on('save-video', (event, arg) => {
   event.reply('video-save-progress', 'Saving video...')
 })
 
+// Scrape the CCL page when requested, and return the metadata of the song being scraped
+ipcMain.on('get-song-metadata', (event, arg) => {
+  event.reply('song-metadata', getSongMetadata(arg.data));
+})
 
 
 function createWindow () {
@@ -50,7 +56,8 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false
     }
   })
 

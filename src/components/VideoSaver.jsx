@@ -1,5 +1,4 @@
 import React, { useEffect, useState }  from "react";
-import videoshow from 'videoshow';
 // In renderer process (web page).
 const { ipcRenderer } = require('electron')
 
